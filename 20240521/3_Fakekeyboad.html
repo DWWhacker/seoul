@@ -1,0 +1,224 @@
+<!-- 아래는 요청하신 중앙 정렬과 따뜻한 파스텔톤 색상을 적용한 정상적인 키보드 디자인입니다. 글씨는 한글과 영어가 혼용되어 있으며, 키를 눌렀을 때 ASMR 소리를 재생하는 기능이 포함되어 있습니다.
+
+```html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keyboard Design</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #faf3e0;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  #my-input {
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .events {
+    width: 350px;
+    height: 40px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    background-color: #f5f5f5;
+  }
+
+  .event {
+    width: 30%;
+    padding: 5px;
+    text-align: center;
+    border-left: 1px solid #ddd;
+    color: #333;
+  }
+
+  .check {
+    color: #ffffff;
+  }
+
+  #keypress.check {
+    background-color: #ffadad;
+  }
+
+  #keydown.check {
+    background-color: #ffd6a5;
+  }
+
+  #keyup.check {
+    background-color: #caffbf;
+  }
+
+  .function-keys, .main-keys {
+    display: flex;
+    justify-content: center;
+    margin: 10px auto;
+    flex-wrap: wrap;
+    width: 700px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .key {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffebcc;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .key:hover {
+    background-color: #ffdbac;
+  }
+
+  #Backspace,
+  #Tab {
+    width: 90px;
+  }
+
+  #CapsLock,
+  #Enter {
+    width: 90px;
+  }
+
+  #ShiftLeft,
+  #ShiftRight {
+    width: 110px;
+  }
+
+  #ControlLeft,
+  #ControlRight,
+  #AltLeft,
+  #AltRight,
+  #MetaLeft,
+  #MetaRight {
+    width: 70px;
+  }
+
+  #Space {
+    width: 340px;
+  }
+
+  .on {
+    background-color: #f3c4fb;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    transform: translateY(1px);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <input id="my-input" type="text">
+  <div class="events">
+    <div id="keypress" class="event">KeyPress</div>
+    <div id="keydown" class="event">KeyDown</div>
+    <div id="keyup" class="event">KeyUp</div>
+  </div>
+  <div class="function-keys">
+    <div class="row">
+      <div class="key" id="F1">F1</div>
+      <div class="key" id="F2">F2</div>
+      <div class="key" id="F3">F3</div>
+      <div class="key" id="F4">F4</div>
+      <div class="key" id="F5">F5</div>
+      <div class="key" id="F6">F6</div>
+      <div class="key" id="F7">F7</div>
+      <div class="key" id="F8">F8</div>
+      <div class="key" id="F9">F9</div>
+      <div class="key" id="F10">F10</div>
+      <div class="key" id="F11">F11</div>
+      <div class="key" id="F12">F12</div>
+    </div>
+  </div>
+  <div class="main-keys">
+    <div class="row">
+      <div class="key" id="Backquote">` ~</div>
+      <div class="key" id="Digit1">1 !</div>
+      <div class="key" id="Digit2">2 @</div>
+      <div class="key" id="Digit3">3 #</div>
+      <div class="key" id="Digit4">4 $</div>
+      <div class="key" id="Digit5">5 %</div>
+      <div class="key" id="Digit6">6 ^</div>
+      <div class="key" id="Digit7">7 &</div>
+      <div class="key" id="Digit8">8 *</div>
+      <div class="key" id="Digit9">9 (</div>
+      <div class="key" id="Digit0">0 )</div>
+      <div class="key" id="Minus">- _</div>
+      <div class="key" id="Equal">= +</div>
+      <div class="key" id="Backspace">Backspace</div>
+    </div>
+    <div class="row">
+      <div class="key" id="Tab">Tab</div>
+      <div class="key" id="KeyQ">Q ㄱ</div>
+      <div class="key" id="KeyW">W ㅈ</div>
+      <div class="key" id="KeyE">E ㄷ</div>
+      <div class="key" id="KeyR">R ㄹ</div>
+      <div class="key" id="KeyT">T ㅅ</div>
+      <div class="key" id="KeyY">Y ㅛ</div>
+      <div class="key" id="KeyU">U ㅕ</div>
+      <div class="key" id="KeyI">I ㅑ</div>
+      <div class="key" id="KeyO">O ㅐ</div>
+      <div class="key" id="KeyP">P ㅔ</div>
+      <div class="key" id="BracketLeft">[ {</div>
+      <div class="key" id="BracketRight">] }</div>
+      <div class="key" id="Backslash">\ |</div>
+    </div>
+    <div class="row">
+      <div class="key" id="CapsLock">CapsLock</div>
+      <div class="key" id="KeyA">A ㅁ</div>
+      <div class="key" id="KeyS">S ㄴ</div>
+      <div class="key" id="KeyD">D ㅇ</div>
+      <div class="key" id="KeyF">F ㄹ</div>
+      <div class="key" id="KeyG">G ㅎ</div>
+      <div class="key" id="KeyH">H ㅗ</div>
+      <div class="key" id="KeyJ">J ㅓ</div>
+      <div class="key" id="KeyK">K ㅏ</div>
+      <div class="key" id="KeyL">L ㅣ</div>
+      <div class="key" id="Semicolon">; :</div>
+      <div class="key" id="Quote">' "</div>
+      <div class="key" id="Enter">Enter</div>
+    </div>
+    <div class="row">
+      <div class="key" id="ShiftLeft">Shift</div>
+      <div class="key" id="KeyZ">Z ㅋ</div>
+      <div class="key" id="KeyX">X ㅌ</div>
+      <div class="key" id="KeyC">C ㅊ</div>
+      <div class="key" id="KeyV">V ㅍ</div>
+      <div class="key" id="KeyB">B ㅠ</div>
+      <div class="key" id="KeyN">N ㅜ</div>
+      <div class="key" id="KeyM">M ㅡ</div>
+      <div class="key" id="Comma">, <</div>
+      <div class="key" id="Period">. ></div>
+      <div class="key" id="Slash">/ ?</div>
+      <div class="key" id="ShiftRight">Shift</div>
+    </div>
+    <div class="row">
