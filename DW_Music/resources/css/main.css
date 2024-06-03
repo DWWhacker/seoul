@@ -1,0 +1,28 @@
+html {
+  font-family: Pretendard;
+}
+body {
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+}
+.bg {
+  width: 100%;
+  opacity: 0.5;
+}
+.hero {
+  position: relative;
+}
+.hero-heading {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+.hero-heading > h1 {
+  font-weight: 400;
+  font-size: 80px;
+  color: #fff;
+  text-align: center;
+}
