@@ -6,6 +6,23 @@ body {
   color: #fff;
   margin: 0;
 }
+.header{
+  position:fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 16px;
+  z-index:1;
+  font-weight:700;
+  background-image: linear-gradient(#000, rba (0, 0, 0, 0)
+  /*  위는 어둡고 밑은 투명 */
+}
+.warp{
+  max-width: 1080px; 
+  /* 보통 모니터가 1080 넘어서 나머지는 margin으로 주겠다는 것. */
+  width:100%;
+  margin: 0 auto;
+}
 .bg {
   width: 100%;
   opacity: 0.5;
@@ -19,6 +36,7 @@ body {
   justify-content: center;
   align-items: center;
   position: absolute;
+  inset:0;
 }
 .hero-heading > h1 {
   font-weight: 400;
@@ -26,3 +44,48 @@ body {
   color: #fff;
   text-align: center;
 }
+.headline {
+  display :flex;
+  justifu-content:center;
+  align-items: center;
+  gap:176px;
+
+
+}
+.headline-heading{
+  font-weight: 700;
+  font-size:57px;
+  margin: 32px 0;
+}
+.promotion{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:200px 0;
+  padding: 80px 180pxl
+  background-color:#280357;
+  
+}
+.promotion h2 {
+  font-weight: 400;
+  font-size:40px;
+  margin: 24px 0;
+}
+.promotion-button{
+  border:1px solid #fff
+  padding:24px;
+  border-radius:16px;
+  font-size: 24px;
+  color:#fff;
+  background-color: 
+}
+
+
+distplay:grid;
+grid-template-columns:reapeat(3,1fr);
+age:40px;]
+.stations{ width:100%
+
+  const stations= document.getElementById("stations")
+}
+
