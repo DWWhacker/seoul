@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>파이어베이스 연습</title>
+    <style>
+      tr {
+        cursor: pointer;
+        height: 50px;
+      }
+      .selected {
+        background-color: yellow;
+      }
+      .active {
+        pointer-events: auto;
+      }
+      .nonActive {
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <form name="joinForm">
+      <p>
+        <label>이름 : </label>
+        <input type="text" name="name" />
+      </p>
+      <p>
+        <label>나이 : </label>
+        <input type="text" name="age" />
+      </p>
+      <p>
+        <label>이메일 : </label>
+        <input type="text" name="email" />
+      </p>
+      <p>
+        <label>전화번호 : </label>
+        <input type="text" name="tel" />
+      </p>
+      <p>
+        <label>성별 : </label>
+        <input type="text" name="gender" />
+      </p>
+    </form>
+    <button id="saveBtn">데이터 저장</button>
+
+    <table border="1"></table>
+    <br /><br />
+    <button id="updateBtn">회원정보 수정</button>
+    <button id="saveUpdateBtn">회원정보 저장</button>
+    <button id="deleteBtn">회원 삭제</button>
+
+    <script type="module">
+      import { db, getDatas, addDatas, deleteDatas, updateDatas } from "../resources/js/firebase.js";
+      
+      // 1. getMembers 함수: Firestore에서 회원 데이터를 가져와 테이블에 표시하는 함수
+      async function getMembers() {
+        const snapshot = await getDatas("member"); // Firestore에서 "member" 콜렉션 데이터를 가져옴
+        const tableTag = document.querySelector("table");
+        let tagStr = `
+          <tr>
+            <th>이름</th>
+            <th>나이</th>
+            <th>성별</th>
+            <th>이메일</th>
+            <th>전화번호</th>
+          </tr>
+        `;
+        snapshot.forEach((doc) => {
+          const { name, age, gender, tel, email } = doc.data();
+          tagStr += `
+            <tr>
+              <td class="name">${name}</td>
+              <td class="age">${age}</td>
+              <td class="gender">${gender}</td>
+              <td class="email">${email}</td>
+              <td class="tel">${tel}</td>
+              <input type='hidden' value='${doc.id}' />
+            </tr>
+          `;
+        });
+        tableTag.innerHTML = tagStr; // 테이블에 데이터를 채움
+      }
+
+      // 2. handleTrClick 함수: 각 테이블 행(tr)에 클릭 이벤트를 추가하는 함수
+      function handleTrClick() {
+        const trs = document.querySelectorAll("tr");
+        trs.forEach((tr) => {
+          tr.addEventListener("click", (e) => {
+            if (e.target.tagName !== "TH") {
+              tr.classList.toggle("selected"); // 클릭한 행을 선택/선택 해제
+            }
+          });
+        });
+      }
+
+      // 3. getMembersHandleTrClick 함수: getMembers 함수를 호출한 후 handleTrClick 함수를 호출하는 함수
+      function getMembersHandleTrClick() {
+        getMembers().then(handleTrClick);
+      }
+
+      // 4. 초기 실행: 페이지 로드 시 회원 데이터를 가져오고 클릭 이벤트를 설정
+      getMembersHandleTrClick();
+
+      // 5. 삭제 버튼 이벤트 리스너
+      document.getElementById("deleteBtn").addEventListener("click", function () {
+        const selectedTrs = document.querySelectorAll("tr.selected");
+        if (selectedTrs.length === 0) {
+          alert("삭제할 데이터가 없습니다.");
+          return;
+        }
+
+        // 선택된 행을 반복하면서 Firestore에서 해당 데이터를 삭제
+        selectedTrs.forEach((tr) => {
+          const docId = tr.querySelector("input[type='hidden']").value;
+          deleteDatas("member", docId);
+        });
+
+        // 삭제 후 회원 데이터를 다시 로드하고 클릭 이벤트를 설정
+        getMembersHandleTrClick();
+      });
+
+      // 6. 수정 버튼 이벤트 리스너
+      document.getElementById("updateBtn").addEventListener("click", function () {
+        const selectedTrs = document.querySelectorAll("tr.selected");
+        if (selectedTrs.length === 0) {
+          alert("수정할 회원을 선택해주세요.");
+          return;
+        } else if (selectedTrs.length > 1) {
+          alert("회원정보 수정은 하나씩만 가능합니다.");
+          return;
+        }
+
+        // 선택된 행의 각 셀(td)에 입력 필드를 추가
+        const selectedTr = selectedTrs[0];
+        const trChildren = selectedTr.children;
+        Array.from(trChildren).forEach((td) => {
+          if (td.tagName !== "INPUT") {
+            const tdText = td.innerText;
+            td.innerHTML = `<input type='text' value='${tdText}' />`;
+          }
+        });
+      });
+
+      // 7. 저장 버튼 이벤트 리스너 (수정된 데이터 저장)
+      document.getElementById("saveUpdateBtn").addEventListener("click", function () {
+        const selectedTr = document.querySelector("tr.selected");
+        if (!selectedTr) {
+          alert("저장할 회원을 선택해주세요.");
+          return;
+        }
+        const trChildren = selectedTr.children;
+
+        const trChildrenArr = Array.from(trChildren);
+        const docId = trChildrenArr.pop().querySelector("input").value; // 수정할 문서 ID
+        const updateObj = trChildrenArr.reduce((acc, cur) => {
+          if (cur.tagName !== "INPUT") {
+            acc[cur.classList.value] = cur.querySelector("input").value;
+          }
+          return acc;
+        }, {});
+
+        // 수정된 내용을 다시 테이블에 반영
+        let originTrStr = "";
+        trChildrenArr.forEach((td) => {
+          originTrStr += `<td>${td.querySelector("input").value}</td>`;
+        });
+        originTrStr += `<input type='hidden' value='${docId}' />`;
+        selectedTr.innerHTML = originTrStr;
+        selectedTr.classList.remove("selected");
+
+        // Firestore에 수정된 데이터를 업데이트
+        updateDatas("member", docId, updateObj);
+      });
+
+      // 8. 저장 버튼 이벤트 리스너 (새로운 데이터 저장)
+      document.getElementById("saveBtn").addEventListener("click", async function () {
+        const formEl = document.forms["joinForm"];
+        const formData = new FormData(formEl);
+        const memberInfo = Object.fromEntries(formData.entries());
+        memberInfo.age = Number(memberInfo.age); // 나이를 숫자로 변환
+
+        // Firestore에 데이터를 추가
+        const result = await addDatas("member", memberInfo);
+        if (result) {
+          getMembersHandleTrClick(); // 성공 시 회원 데이터를 다시 로드
+        } else {
+          alert("저장을 실패했습니다");
+        }
+      });
+    </script>
+  </body>
+</html>
