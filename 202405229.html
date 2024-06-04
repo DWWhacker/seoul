@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Authors</h1>
+    <!-- 버튼그룹 각 버튼이 서로 다른 카테고리 데이터 요청을 트리거함 -->
+
+    <button>posts</button>
+    <button>comments</button>
+    <button>albums</button>
+    <button>photos</button>
+    <button>users</button>
+    <button>todos</button>
+
+    <!-- 작성자list -->
+    <ul id="authors"></ul>
+  </body>
+
+  <script>
+
+
+        //  비동기 함수:
+        // 데이터를 가져와 콘솔에 출력
+
+        // 클릭 버튼 텍스트 내용을 가져온다.
+        -
+        async function fetchAndPrintPrint(){
+    const btnText = this.innerHTML;
+    cosnt url = 'http://jsnplaceholder.typicode.com/${btnText}';
+
+
+    // API로부터 응답을 받음
+    //  JSON 형식으로 응답데이터 파싱
+    //  콘솔에 결과 출력
+    cosnt response = await fetch(ul);
+     const result = await response.json();
+      console.log(result);
+        }
+
+        // 모든 버튼 이벤트 리스너 +
+        const btns = document.querySelectorAll('button');
+        btn.forEach((el)=> {
+            el.addEventLister('click', fetchAndprint);
+        })
+  </script>
+</html>
+<!-- 
+
+정리 비동기 함수 를 통해 데이터 가져와 콘솔에 출력한다. 
+
+먼저, 클릭된 버튼 텍스트 내용- 
+가져와 JSONPLACEGOLER api 에서 데이터 요청하는 URL 
+const url = ' https://jsonplacegolder.typicode.com/${btnText}'; 
+콘솔에 결과 출력
+
+console.log(result);
+
+
+비동기 함수는 비동기적인 작업을 수행한다. 
+이 함수들은 특정 작업이 완료 될 때까지 기다리지 않고 다음 코드를
+실행합니다. JavaScript 에서 비동기 함수는 주로 네트워크 요청
+파일 ㅇ릭기/ 쓰기, 타이머 등의 작업에 사용
+
+비동기 함수를 사용하면 웹 애플리케이션에서 중요한 기능을 블로킹하지 않고
+다른 작업을 수 행할 수 있습니다. 얘를 들어 
+네트워크 요청을 보내는 동안 사용자 인터페이스를 
+응답성있게 유지하고, 사용자가 다른 작업을 수행할 수 있도록
+합니다. 
+
+1.콜백 함수 : 콜백 함수를사용해 작업완료 호출 되도록 합니다. 
+2. Promise: Promise 객체를 사용하여 비동기 작업의 성공
+실패 처리 
+3. async/await.: async 및 await 키워드를 사용하여 코드를 동기적으로 작성하고 ,
+비동기 자업을 처리할 수 있다.  -->

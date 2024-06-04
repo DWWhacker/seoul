@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- 문서 인코딩 및 뷰포트 설정 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 페이지 제목 설정 -->
+    <title>async-await</title>
+  </head>
+  <body>
+    <!-- 제목 표시 -->
+    <h1>Authors</h1>
+    <!-- 버튼 그룹: 각 버튼은 서로 다른 카테고리의 데이터 요청을 트리거함 -->
+    <button>posts</button>
+    <button>comments</button>
+    <button>albums</button>
+    <button>photos</button>
+    <button>users</button>
+    <button>todos</button>
+    <!-- 작성자 목록을 표시할 리스트 -->
+    <ul id="authors"></ul>
+  </body>
+  <script>
+    // 비동기 함수를 통해 데이터를 가져와 콘솔에 출력하는 함수
+    async function fetchAndPrint() {
+      // 클릭된 버튼의 텍스트 내용을 가져옴
+      const btnText = this.innerHTML;
+      // 버튼 텍스트를 기반으로 JSONPlaceholder API에서 데이터를 요청하는 URL 생성
+      const url = `https://jsonplaceholder.typicode.com/${btnText}`;
+      // API로부터 응답을 받음
+      const response = await fetch(url);
+      // JSON 형식으로 응답 데이터를 파싱
+      const result = await response.json();
+      // 콘솔에 결과 출력
+      console.log(result);
+    }
+
+    // 모든 버튼에 클릭 이벤트 리스너 추가
+    const btns = document.querySelectorAll("button");
+    btns.forEach((el) => {
+      el.addEventListener("click", fetchAndPrint);
+    });
+  </script>
+</html>

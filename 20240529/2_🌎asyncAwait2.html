@@ -1,0 +1,77 @@
+<!-- 
+🚨비동기 프로그래밍:
+async 함수와 await 
+키워드를 사용하여 비동기 작업을 처리한다.
+async 함수는 항상 Promise 객체를 반환하며, 
+await는 async 함수 내에서만 사용된다.
+
+🚨데이터 요청 및 처리:
+버튼 클릭 시 해당 
+카테고리에 대한 데이터를 JSONPlaceholder API에서 요청한다.
+응답 받은 데이터를 
+처리하여 작성자 목록을 표시한다.
+
+🚨이벤트 처리:
+각 버튼에 클릭 이벤트 리스너를 
+추가하여 클릭 시 데이터를 요청하고 출력한다. -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- 문서 인코딩 및 뷰포트 설정 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 페이지 제목 설정 -->
+    <title>async-await</title>
+  </head>
+  <body>
+    <!-- 제목 표시 -->
+    <h1>Authors</h1>
+    <!-- 버튼 그룹: 카테고리 선택 -->
+    <button>posts</button>
+    <button>comments</button>
+    <button>albums</button>
+    <button>photos</button>
+    <button>users</button>
+    <button>todos</button>
+    <!-- 작성자 목록을 표시할 리스트 -->
+    <ul id="authors"></ul>
+  </body>
+  <script>
+    // 비동기 함수를 통해 데이터를 가져와 출력하는 함수
+    async function fetchAndPrint() {
+      // 클릭한 버튼의 텍스트 내용을 저장
+      const btnText = this.innerHTML;
+      // API 요청할 URL 생성
+      const url = `https://jsonplaceholder.typicode.com/${btnText}`;
+      // API로부터 응답 받기
+      const response = await fetch(url);
+      // JSON 형식으로 변환하여 결과 받기
+      const result = await response.json();
+      // 작성자 목록을 표시할 ul 요소 선택
+      const ulTag = document.getElementById("authors");
+      // 결과 반복하여 처리
+      result.forEach((el) => {
+        // 객체의 키 배열 가져오기
+        const keys = Object.keys(el);
+        // 각 키에 대해 처리
+        keys.forEach((userKey) => {
+          // 값이 문자열인 경우에만 리스트 아이템으로 추가
+          if (typeof el[userKey] == "string") {
+            // 새로운 리스트 아이템 생성
+            const liTag = document.createElement("li");
+            // 키와 값 표시
+            liTag.innerHTML = `${userKey}: ${el[userKey]}`;
+            // ul에 추가
+            ulTag.append(liTag);
+          }
+        });
+      });
+    }
+
+    // 모든 버튼에 이벤트 리스너 추가
+    const btns = document.querySelectorAll("button");
+    btns.forEach((el) => {
+      el.addEventListener("click", fetchAndPrint);
+    });
+  </script>
+</html>
